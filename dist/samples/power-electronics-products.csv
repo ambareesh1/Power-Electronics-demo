@@ -1,0 +1,7 @@
+"SKU","Title","Description","Category","Price","Stock","CompareAtPrice","ImageURL"
+"PE-UNO-001","Arduino Uno R3 Development Board","ATmega328P board for starter circuits and classroom prototypes.","Development boards","549","40","699",""
+"PE-ESP32-002","ESP32 Wi-Fi Bluetooth Development Board","38-pin ESP-WROOM-32 board for connected sensor projects.","Development boards","349","60","449",""
+"PE-RPI4-003","Raspberry Pi 4 Model B 4GB","4GB single-board computer for embedded and IoT builds.","Raspberry Pi","6499","15","7299",""
+"PE-LDR-004","LDR Light Sensor Module","Analog and digital light detection module for Arduino.","Sensors","49","100","79",""
+"PE-RFID-005","PN532 NFC RFID Module V3","13.56MHz RFID module with SPI, I2C and UART interfaces.","Sensors","399","25","549",""
+"PE-DISPLAY-006","Waveshare 7-inch HDMI Display","LCD display for Raspberry Pi dashboards and embedded UI.","Displays","3899","10","4599",""

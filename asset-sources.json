@@ -1,0 +1,128 @@
+[
+  {
+    "id": 1,
+    "name": "Arduino (13)",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/06/1_5e1706e1-7da4-457e-acd1-df00e8cb89ce_1000x.webp",
+    "dimensions": [
+      700,
+      700
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Raspberry Pi (15)",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/06/Raspberry-pi-5_1.png",
+    "dimensions": [
+      727,
+      555
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Arduino Mega 2560 R3 with CH340 USB Chip",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/06/Mega_2560_R3_Development_Board_with_USB_Type-B_Cable_-_Compatible_with_Arduino_9.webp",
+    "dimensions": [
+      800,
+      800
+    ]
+  },
+  {
+    "id": 4,
+    "name": "ESP32 NodeMCU 38-Pin Development Board",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/06/51jozekVp-L._SL1100_-800x800.jpg",
+    "dimensions": [
+      800,
+      800
+    ]
+  },
+  {
+    "id": 5,
+    "name": "ESP32-S3 mini DevKit Development Board",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/06/41cnPd05wrL.jpg",
+    "dimensions": [
+      522,
+      522
+    ]
+  },
+  {
+    "id": 6,
+    "name": "LDR Light Sensor Module",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/06/41TNOg0wM4L.jpg",
+    "dimensions": [
+      500,
+      500
+    ]
+  },
+  {
+    "id": 7,
+    "name": "TTP223 Capacitive Touch Sensor  Module",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/06/51wUYCbimQL._SL1001_-800x800.jpg",
+    "dimensions": [
+      800,
+      800
+    ]
+  },
+  {
+    "id": 8,
+    "name": "PN532 NFC RFID Module V3",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/06/51HLmACRTIL._SX522_.jpg",
+    "dimensions": [
+      522,
+      522
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Raspberry pi  7-inch Displays Waveshare",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/06/7inch-hdmi-lcd-h-1_1.webp",
+    "dimensions": [
+      900,
+      675
+    ]
+  },
+  {
+    "id": 10,
+    "name": "12V 5A DC Power Adapter",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/07/51EpqTrN5vL._SX679_.jpg",
+    "dimensions": [
+      679,
+      482
+    ]
+  },
+  {
+    "id": 11,
+    "name": "ST-LINK/V2 Programmer and Debugger for STM8 & STM32",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/08/ST-LinkV2Programmer_1000x.webp",
+    "dimensions": [
+      700,
+      700
+    ]
+  },
+  {
+    "id": 12,
+    "name": "STM32F103C8T6 ARM Development Board \u2013 Blue Pill",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/08/177_1000x.webp",
+    "dimensions": [
+      700,
+      700
+    ]
+  },
+  {
+    "id": 13,
+    "name": "5mm Green LED (Light Emitting Diode) pack of 100",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/07/517L92HvNbL._SX522_-1.jpg",
+    "dimensions": [
+      522,
+      272
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Hi-Watt (HW) 9V  Non-Rechargeable Battery",
+    "source": "https://vishalelectronics.in/wp-content/uploads/2026/06/414nlFlW37L.jpg",
+    "dimensions": [
+      500,
+      500
+    ]
+  }
+]
