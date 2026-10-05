@@ -41,6 +41,10 @@ The top bar links to separate customer and administrator login pages. Each scree
 - Product cards show **Add to cart** at zero quantity and **minus / quantity / plus** after adding.
 - Cart, BUILD10 discount, sample checkout, confirmation, inventory updates and customer order history.
 - Admin overview, products, inventory, order-status editing and customer summaries.
+- **Settings**: email/SMS preferences, sender/admin contact fields, communication preview log, and enabled UPI/card/COD methods with configurable fixed and percentage charges.
+- **Catalog editor**: title, SKU, category, description, price, compare-at price, stock, specifications, active/inactive visibility, HTTPS image URL, reference photo or replacement PNG/JPEG/WebP upload (500 KB maximum). Inactive products are hidden from the storefront and removed from active carts.
+- **Price versions**: searchable, expandable product tree grid with initial recorded price and every subsequent price change.
+- **Quotation assistant**: matched-component line totals and a suggested bulk quotation, with manual matching for unknown or ambiguous items and an explicit Add amount action.
 - Customer **Bulk orders**: contact and institution details, required shipping address and optional alternate phone, downloadable Item/Count templates, XLSX/CSV validation, preview, and request tracking.
 - Role-specific **Notifications**: unread bell counts, All/Unread filters, mark-as-read and detail links for new bulk requests, status updates, catalog price changes and stock availability. Notifications persist locally and sync across tabs on the same origin.
 - **Stock requests**: customer availability requests from out-of-stock products, admin review/status/notes, duplicate-request protection and automatic customer updates when an item is restocked.
@@ -71,7 +75,7 @@ A real launch requires server-side authentication and authorization, a shared da
 
 ## Files
 
-`dist/index.html`, `dist/style.css`, `dist/app.js`, `dist/operations.js` and `dist/customer-experience.js` contain the interface and logic. `dist/assets/` contains 14 product images. `dist/samples/` contains the Excel and CSV templates. `dist/vendor/` contains SheetJS CE 0.20.3 and its license. `asset-sources.json` records the photo sources.
+`dist/index.html`, `dist/style.css`, `dist/app.js`, `dist/operations.js` and `dist/customer-experience.js` and `dist/admin-features.js` contain the interface and logic. `dist/assets/` contains 14 product images. `dist/samples/` contains the Excel and CSV templates. `dist/vendor/` contains SheetJS CE 0.20.3 and its license. `asset-sources.json` records the photo sources.
 
 Photos were retrieved from the user-specified Vishal Electronics reference catalog for client demonstration. Commercial reuse permission has not been verified. SheetJS is vendored from its official CDN and distributed under Apache 2.0.
 
@@ -94,3 +98,19 @@ Manual address entry works without configuration. To enable optional Google Plac
 ## Notifications and availability demo
 
 Submit a bulk request as customer, then switch to the admin account in the same browser. Open the bell inbox to see the new request and its full details. Change the quote/status; switch back to customer to see the update. From an out-of-stock product, choose **Request availability**, enter contact details and quantity, then submit. Admin can review requests under **Stock requests** and add customer-visible notes. Restocking a product automatically marks open requests Available and creates customer notifications; actual purchasing still depends on current inventory. Single-product and selected-product out-of-stock actions are available. Product cards/details show the most recent price update, and cart/checkout flag changed catalog prices. Notifications are in-app only and do not reach another device or a signed-out user outside this browser. Production notification delivery requires a shared backend and configured messaging services.
+
+## Settings demonstration
+
+Admin **Settings** controls email and SMS preview preferences, sender/reply-to details and the admin recipient. Enabled communication channels produce entries in the communication preview log when request notifications occur; they do not call email or SMS providers. Configure actual provider credentials on a server for production delivery, never in browser storage.
+
+UPI, Card and Cash on delivery can be enabled or disabled independently; at least one must remain enabled. Each method supports a fixed INR charge plus a percentage of the item subtotal after coupon discount, excluding delivery. The fee appears in checkout, follows the selected method and is stored with the resulting demo order. Existing order totals retain their original amounts. No real card details are requested and no payments are collected.
+
+## Catalog visibility and price versions
+
+Use **Edit** on any admin product to change its full catalog details, image and visibility. Deactivating preserves its admin/order records but removes it from customer listings, direct product pages and active carts. Select **Price versions** or open **Price history** to expand product rows and inspect each recorded version. Search by name, SKU, category, reason, admin or price value. History begins when price tracking was introduced; earlier unknown edits cannot be reconstructed.
+
+In **Bulk price adjustment**, choose **Mark out of stock** as the adjustment type, select all/category/selected scope, add a reason, preview the products and save. Prices remain unchanged and availability requests remain available.
+
+## Suggested bulk quotations
+
+Open an incomplete bulk request as admin. The quotation assistant matches requested names or SKUs to active catalog products and computes unit price × count for each row. Unknown or ambiguous matches require a manual product choice. A complete matched total enables **Add quotation**, which fills the quotation field without saving or changing status. Review availability, delivery and other charges, then save the request update to notify the customer. Suggestions exclude delivery and payment charges.
