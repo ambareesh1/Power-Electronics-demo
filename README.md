@@ -1,6 +1,6 @@
 # Power Electronics demo
 
-Complete responsive electronics ecommerce prototype with the white, charcoal and coral theme, bundled product photos, customer and admin demo accounts, and an Excel-to-catalog review workflow.
+Complete responsive electronics ecommerce prototype with the white, charcoal and coral theme, bundled product photos, customer and admin demo accounts, an Excel-to-catalog review workflow, institutional bulk quotation requests, and catalog pricing controls.
 
 ## Deploy on Vercel
 
@@ -41,9 +41,13 @@ The top bar links to separate customer and administrator login pages. Each scree
 - Product cards show **Add to cart** at zero quantity and **minus / quantity / plus** after adding.
 - Cart, BUILD10 discount, sample checkout, confirmation, inventory updates and customer order history.
 - Admin overview, products, inventory, order-status editing and customer summaries.
+- Customer **Bulk orders**: contact and institution details, downloadable Item/Count templates, XLSX/CSV validation, preview, and request tracking.
+- Admin **Bulk orders**: customer lists, quote total, customer-visible notes, and Submitted → Quoted → Delivered → Completed timeline.
+- **Pricing & stock**: all-product, category, or selected-product adjustments by percentage (e.g. 0.5%) or INR (e.g. ₹25), before/after previews, selected stock updates, and out-of-stock actions.
+- **Price history**: individual edits, bulk changes, and Excel republication audit records, with actor, timestamp, reason, before/after amounts and CSV export.
 - **Upload Excel**: XLSX, XLS and CSV files up to 5 MB and 250 products per batch.
 - Downloadable Excel/CSV templates and **Try sample products**.
-- **Uploaded items**: validation errors, duplicate SKUs, image matching, editable drafts, batch filters and explicit publish confirmation.
+- **Uploaded items**: validation errors, duplicate SKUs, image matching, editable drafts, batch filters, downloadable issue reports and explicit publish confirmation.
 - Editing a published import creates pending changes; republishing updates the existing product.
 
 ## Import workflow
@@ -51,23 +55,32 @@ The top bar links to separate customer and administrator login pages. Each scree
 1. Sign in as admin and open **Upload Excel**.
 2. Download the template, or choose **Try sample products**.
 3. Upload a sheet with SKU, Title, Description, Category, Price and Stock. CompareAtPrice and ImageURL are optional.
-4. Review drafts in **Uploaded items**. Fix invalid rows and check each product image.
-5. Publish selected or ready items. They become visible in the same browser's demo storefront.
+4. Choose the worksheet, map source columns, and validate the row preview before creating drafts. Required fields cannot be skipped or mapped to duplicate columns.
+5. Review drafts in **Uploaded items**. Fix invalid rows and check each product image.
+6. Publish selected or ready items. They become visible in the same browser's demo storefront.
 
 Images automatically match against the included reference catalog. Unknown products require a manually selected reference photo or a direct public HTTPS ImageURL. This demo does not perform live internet image search. External URLs are checked by the browser and may be blocked by the image host.
 
 ## Data and production boundary
 
-Cart, wishlist, orders, profile, import batches and catalog edits are stored in localStorage in the current browser. Demo login is in sessionStorage. Data is not shared between devices or visitors. No real payments, emails, notifications or shipments occur. All prices, stock, ratings, orders and policies are sample content. Imported products do not receive fabricated reviews.
+Cart, wishlist, orders, bulk requests, price history, profile, import batches and catalog edits are stored in localStorage in the current browser. Demo login is in sessionStorage. Data is not shared between devices or visitors. No real payments, emails, notifications or shipments occur. All prices, stock, ratings, orders and policies are sample content. Imported products do not receive fabricated reviews.
 
 A real launch requires server-side authentication and authorization, a shared database, upload storage, verified product data, approved image usage, payment and delivery integrations, tax settings and legal policies. The public demo credentials must not be used as real account credentials.
 
 ## Files
 
-`dist/index.html`, `dist/style.css` and `dist/app.js` contain the interface and logic. `dist/assets/` contains 14 product images. `dist/samples/` contains the Excel and CSV templates. `dist/vendor/` contains SheetJS CE 0.20.3 and its license. `asset-sources.json` records the photo sources.
+`dist/index.html`, `dist/style.css`, `dist/app.js` and `dist/operations.js` contain the interface and logic. `dist/assets/` contains 14 product images. `dist/samples/` contains the Excel and CSV templates. `dist/vendor/` contains SheetJS CE 0.20.3 and its license. `asset-sources.json` records the photo sources.
 
 Photos were retrieved from the user-specified Vishal Electronics reference catalog for client demonstration. Commercial reuse permission has not been verified. SheetJS is vendored from its official CDN and distributed under Apache 2.0.
 
 ## Validation
 
-`npm run build` verifies JavaScript syntax, required files, local asset references and static Vercel settings. During authoring, simulated UI/state checks covered shopping, separate demo logins, card quantities, sharing, real XLSX import, validation, automatic image matches, draft isolation, publishing and republishing. The sample workbook was rendered and visually reviewed. Full live-browser visual QA and a real Vercel deployment have not been performed.
+`npm run build` verifies JavaScript syntax, required files, local asset references and static Vercel settings. During authoring, simulated UI/state checks covered shopping, separate demo logins, card quantities, sharing, real XLSX import, validation, automatic image matches, draft isolation, publishing and republishing. The sample workbook was rendered and visually reviewed. `npm test` covers actual XLSX customer/product templates, bulk-request validation and stage transitions, 0.5% and category ₹25 price changes, stock/cart sync, individual and Excel price history, storage rollback, authorization guards and persistence. Live-browser visual QA could not run in this environment because Chromium was unavailable and its download failed. A real Vercel deployment has not been performed.
+
+## Bulk order demonstration
+
+Sign in as customer, open **Bulk orders**, download the sample, fill Item and Count, upload it and enter name, email, phone, institution type and institution name. Review the parsed list and submit. In the same browser, switch to the admin account and open **Bulk orders**. Issue a positive quote, then advance one stage at a time to Quoted, Delivered and Completed. The customer sees the quote, notes and timeline after switching back. Completed requests are closed. No emails are sent.
+
+## Price controls
+
+Open **Pricing & stock** as admin. Choose all products, the current category or selected products, then select percentage/fixed adjustment, increase/decrease, amount and reason. Preview every changed price and confirm. Prices round to two decimals and must remain within ₹0.01–₹10,00,000. Compare-at prices are raised only when required. Previously placed order totals and bulk quotes retain their values. Select products to mark them out of stock or set an explicit quantity; affected cart quantities are reduced to available inventory. **Price history** records changes made after this feature was introduced.
