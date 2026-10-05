@@ -114,3 +114,16 @@ In **Bulk price adjustment**, choose **Mark out of stock** as the adjustment typ
 ## Suggested bulk quotations
 
 Open an incomplete bulk request as admin. The quotation assistant matches requested names or SKUs to active catalog products and computes unit price × count for each row. Unknown or ambiguous matches require a manual product choice. A complete matched total enables **Add quotation**, which fills the quotation field without saving or changing status. Review availability, delivery and other charges, then save the request update to notify the customer. Suggestions exclude delivery and payment charges.
+
+
+## Original customer spreadsheets and interface refinements
+
+New bulk requests retain the exact customer file in IndexedDB, with its filename and size linked to the request. In **Admin → Bulk orders → View details**, use **Preview spreadsheet** to switch worksheets and browse 25 rows per page, or **Download original** for the complete, unchanged file. Preview is bounded to the first 251 rows and 12 columns; downloads preserve all sheets and columns. Older requests retain their parsed item list and offer a clearly labelled submitted-rows CSV download.
+
+This remains a browser-local demo: the customer and admin must use the same browser and site origin. Clearing site storage removes retained originals. Production requires authenticated server-side storage and authorization, such as a database plus object storage.
+
+The configured real Google Places address lookup remains in the shipping section. No dummy address lookup or fictional location suggestions have been added. Additional requirements asks only for required date, component specifications and project notes; optional field labels use `(op)` with an accessible Optional tooltip.
+
+The storefront and admin use consistent spacing, focus states, restrained card styling, a responsive workspace sidebar, spreadsheet processing feedback, and clear file requirements. Reduced-motion preferences are respected. UX references: [GOV.UK file upload](https://design-system.service.gov.uk/components/file-upload/) and [validation patterns](https://design-system.service.gov.uk/patterns/validation/).
+
+Run `npm test` for workbook retention, byte-for-byte original integrity, admin preview and account checks, escaped worksheet content, legacy/missing files, shipping, pricing, catalog and quotation workflows. `npm run build` checks syntax, referenced assets and the static Vercel configuration. Tests use a lightweight DOM harness; they do not replace interactive visual review.

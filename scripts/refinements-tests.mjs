@@ -1,0 +1,38 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+export async function runRefinementChecks({context,run,root}){
+ const bytes=fs.readFileSync(root+'/dist/samples/power-electronics-bulk-order.xlsx');
+ context.originalUploadBytes=new Uint8Array(bytes);
+ run("const retainedUploads=new Map();uploadArchive={async put(r){retainedUploads.set(r.id,r)},async get(id){return retainedUploads.get(id)||null},async delete(id){retainedUploads.delete(id)}};user={role:'customer',email:'customer@powerelectronics.demo'}");
+ run("const incomingFile={name:'Customer components.xlsx',type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',size:originalUploadBytes.length,arrayBuffer:async()=>originalUploadBytes}");
+ await run('loadBulkFile(incomingFile)');
+ assert.equal(run('bulkDraft.items.reduce((n,i)=>n+i.count,0)'),165);
+ assert.ok(run('bulkDraft.fileId.startsWith("upload-")'));
+ const savedBuffer=await run('retainedUploads.get(bulkDraft.fileId).blob.arrayBuffer()');
+ assert.deepEqual(Buffer.from(savedBuffer),bytes);
+ const html=run('customerBulkPage()');
+ assert.match(html,/googleaddresshost/);assert.doesNotMatch(html,/demoaddresssearch|Demo data|Delivery location|\(optional\)/);
+ assert.match(html,/Additional requirements.*?\(op\)/);
+ run("const retainedOrder=submitBulkRequest({name:'Demo Customer',email:'customer@example.com',phone:'9876543210',institution:'Demo College',institutionType:'College',notes:'Required next week',shippingAddress:'Department of ECE, 12 Avenue',shippingCity:'Chennai',shippingState:'Tamil Nadu',shippingPincode:'600020',alternatePhone:''})");
+ assert.ok(run('retainedOrder.uploadedFileId'));assert.equal(run('retainedOrder.uploadedFileSize'),bytes.length);
+ run('bulkDetail(retainedOrder.id)');assert.doesNotMatch(run("$('#modalcontent').innerHTML"),/Preview spreadsheet/);
+ run("user={role:'customer',email:'someoneelse@example.com'}");
+ await assert.rejects(run('originalCustomerUpload(retainedOrder.id)'),/unavailable/);
+ await assert.rejects(run('downloadCustomerUpload(retainedOrder.id)'),/administrator/);
+ run("user={role:'admin',email:'admin@powerelectronics.demo'}");
+ run('bulkDetail(retainedOrder.id)');assert.match(run("$('#modalcontent').innerHTML"),/Preview spreadsheet/);assert.match(run("$('#modalcontent').innerHTML"),/Download original/);
+ await run('previewCustomerUpload(retainedOrder.id)');
+ assert.match(run("$('#customerfilepreview').innerHTML"),/Worksheet/);assert.match(run("$('#customerfilepreview').innerHTML"),/Arduino/);
+ assert.equal(run('uploadedSheetState.sheet'),'Items');
+ context.hostileWorkbookBytes=new Uint8Array(run("XLSX.write({SheetNames:['Items'],Sheets:{Items:XLSX.utils.aoa_to_sheet([['Item','Count'],['<img src=x onerror=alert(1)>',2]])}},{type:'array',bookType:'xlsx'})"));
+ const safePreview=run("sheetPreviewMarkup(workbookPreview({name:'unsafe.xlsx'},hostileWorkbookBytes))");
+ assert.doesNotMatch(safePreview,/<img src=x/);assert.match(safePreview,/&lt;img/);
+ await assert.rejects(run("loadBulkFile({...incomingFile,name:'invalid.txt'})"),/XLSX/);
+ assert.equal(run('bulkDraft'),null);assert.equal(run("$('#bulksubmit').disabled"),true);
+ await run('uploadArchive.delete(retainedOrder.uploadedFileId)');
+ await assert.rejects(run('originalCustomerUpload(retainedOrder.id)'),/no longer/);
+ await assert.rejects(run('originalCustomerUpload(bulkOrders.find(o=>!o.uploadedFileId).id)'),/earlier request/);
+ assert.match(run('admin()'),/admin-workspace-grid/);
+ assert.match(run("importLayout('<h1>Test</h1>','upload')"),/admin-workspace-nav/);
+ console.log('PASS: exact original XLSX retention; submission attachment; admin worksheet preview; account restrictions; escaped cells; invalid upload reset; missing/legacy file handling; Google lookup preserved; compact optional labels; admin workspace navigation.');
+}

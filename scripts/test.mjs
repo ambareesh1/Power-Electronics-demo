@@ -3,14 +3,15 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {webcrypto} from 'node:crypto';
 import path from 'node:path';
+import {runRefinementChecks} from './refinements-tests.mjs';
 import {runExtendedChecks} from './extended-tests.mjs';
 const root=path.resolve(import.meta.dirname,'..');
 const storage=new Map();let failStorage=false;
 const elements=new Map();
-function element(selector){if(!elements.has(selector))elements.set(selector,{innerHTML:'',textContent:'',value:'',disabled:false,classList:{add(){},remove(){}},addEventListener(){},insertAdjacentHTML(position,html){this.innerHTML+=html},showModal(){this.open=true},close(){this.open=false},focus(){},setAttribute(){},querySelector(){return element('child')},setSelectionRange(){}});return elements.get(selector)}
+function element(selector){if(!elements.has(selector))elements.set(selector,{innerHTML:'',textContent:'',value:'',disabled:false,isConnected:true,classList:{add(){},remove(){}},addEventListener(){},insertAdjacentHTML(position,html){this.innerHTML+=html},showModal(){this.open=true},close(){this.open=false},focus(){},setAttribute(){},querySelector(){return element('child')},setSelectionRange(){}});return elements.get(selector)}
 const context=vm.createContext({console,URL,URLSearchParams,Blob,crypto:webcrypto,structuredClone,setTimeout(){return 0},clearTimeout(){},navigator:{},location:{hash:'#/',origin:'http://localhost:3000'},sessionStorage:{getItem(){return null},setItem(){},removeItem(){}},localStorage:{getItem:k=>storage.get(k)??null,setItem(k,v){if(failStorage)throw Error('quota');storage.set(k,v)},removeItem:k=>storage.delete(k)},document:{querySelector:element,querySelectorAll:()=>[],addEventListener(){},createElement:()=>element('anchor')},window:{location:{origin:'http://localhost:3000'},addEventListener(){},scrollTo(){}},Image:class{naturalWidth=100;naturalHeight=100;set src(v){this.onload?.()}}});
 const run=code=>vm.runInContext(code,context);
-for(const file of ['dist/vendor/xlsx.full.min.js','dist/config.js','dist/app.js','dist/operations.js','dist/customer-experience.js','dist/admin-features.js'])run(fs.readFileSync(path.join(root,file),'utf8'));
+for(const file of ['dist/vendor/xlsx.full.min.js','dist/config.js','dist/app.js','dist/operations.js','dist/customer-experience.js','dist/admin-features.js','dist/refinements.js'])run(fs.readFileSync(path.join(root,file),'utf8'));
 run("user={role:'customer',email:'customer@powerelectronics.demo'}");
 const bytes=fs.readFileSync(path.join(root,'dist/samples/power-electronics-bulk-order.xlsx'));context.uploadBytes=new Uint8Array(bytes);
 run("const bulkWorkbook=XLSX.read(uploadBytes,{type:'array'});bulkDraft={items:normalizeBulkRows(sheetMatrix(bulkWorkbook,'Items')),filename:'sample.xlsx'}");
@@ -78,4 +79,5 @@ assert.equal(run("visibleNotifications().filter(n=>n.type==='bulk-status').lengt
 const address=run("addressFromComponents([{longText:'12',types:['street_number']},{longText:'Demo Road',types:['route']},{longText:'Hyderabad',types:['locality']},{longText:'Telangana',types:['administrative_area_level_1']},{longText:'500032',types:['postal_code']}])");assert.equal(address.address,'12, Demo Road');assert.equal(address.pincode,'500032');
 run("user={role:'admin',email:'admin@powerelectronics.demo'}");const beforeNotifications=run('JSON.stringify(notifications)');failStorage=true;assert.throws(()=>run("commitProductChanges([{id:1,price:700}],'Failed notification persistence')"),/not saved/);failStorage=false;assert.equal(run('JSON.stringify(notifications)'),beforeNotifications);
 await runExtendedChecks({context,run,storage});
+await runRefinementChecks({context,run,root});
 console.log('PASS: shipping and alternate phone validation; notification audience/read states; price notices; stock request/review/restock workflow; Google address component mapping; actual XLSX templates; bulk submission and status progression; percentage and category price adjustments; stock and cart sync; individual and Excel price history; rollback; authorization; invalid inputs; persistence.');
