@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 import {webcrypto} from 'node:crypto';
 import path from 'node:path';
+import {runPortalChecks} from './portal-tests.mjs';
 import {runRefinementChecks} from './refinements-tests.mjs';
 import {runExtendedChecks} from './extended-tests.mjs';
 const root=path.resolve(import.meta.dirname,'..');
@@ -80,4 +81,5 @@ const address=run("addressFromComponents([{longText:'12',types:['street_number']
 run("user={role:'admin',email:'admin@powerelectronics.demo'}");const beforeNotifications=run('JSON.stringify(notifications)');failStorage=true;assert.throws(()=>run("commitProductChanges([{id:1,price:700}],'Failed notification persistence')"),/not saved/);failStorage=false;assert.equal(run('JSON.stringify(notifications)'),beforeNotifications);
 await runExtendedChecks({context,run,storage});
 await runRefinementChecks({context,run,root});
+await runPortalChecks({run});
 console.log('PASS: shipping and alternate phone validation; notification audience/read states; price notices; stock request/review/restock workflow; Google address component mapping; actual XLSX templates; bulk submission and status progression; percentage and category price adjustments; stock and cart sync; individual and Excel price history; rollback; authorization; invalid inputs; persistence.');

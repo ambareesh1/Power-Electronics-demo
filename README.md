@@ -127,3 +127,12 @@ The configured real Google Places address lookup remains in the shipping section
 The storefront and admin use consistent spacing, focus states, restrained card styling, a responsive workspace sidebar, spreadsheet processing feedback, and clear file requirements. Reduced-motion preferences are respected. UX references: [GOV.UK file upload](https://design-system.service.gov.uk/components/file-upload/) and [validation patterns](https://design-system.service.gov.uk/patterns/validation/).
 
 Run `npm test` for workbook retention, byte-for-byte original integrity, admin preview and account checks, escaped worksheet content, legacy/missing files, shipping, pricing, catalog and quotation workflows. `npm run build` checks syntax, referenced assets and the static Vercel configuration. Tests use a lightweight DOM harness; they do not replace interactive visual review.
+
+
+## Customer delivery and separate admin portal
+
+Checkout's **Delivery information → Search address** uses the same configured real Google Places widget as institutional bulk orders. Selection fills street address, city, state and PIN code, preserves contact/payment entries through checkout re-renders, and leaves the address editable. Google's current [address form integration](https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform) is the API reference. Missing API access retains manual entry.
+
+Signing in as admin shows a dedicated administration header, notification counter, sign-out action and workspace footer. The storefront header, promotions, categories, cart, wishlist and customer footer are hidden. Direct customer-page links redirect to the admin overview; admin routes and notifications remain available. Sign out to return to customer browsing. This separation is demo UI routing, not server-side authentication.
+
+The automated portal tests stub the Google widget and verify address mapping and checkout-draft preservation, admin/customer route separation and restoration after sign-out. They do not make billable Google requests or assert production backend connectivity.
